@@ -1,0 +1,308 @@
+- name: event_types
+  nrql: |
+    show event types
+- name: event_keyset
+  nrql: |
+    select keyset() from Transaction
+- name: event_star
+  nrql: |
+    select
+        *
+    from
+        Transaction
+- name: event_list
+  nrql: |
+    select
+        appName, appId, eventType()
+    from
+        Transaction
+- name: event_single
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05),
+        funnel(traceId, where duration < 2, where duration < 1),
+        apdex(duration, 0.02),
+        uniqueCount(appId),
+        count(*),
+        min(duration),
+        max(duration),
+        latest(duration),
+        sum(duration),
+        average(duration),
+        stddev(duration),
+        percentile(duration, 50, 75, 90),
+        rate(uniqueCount(appId), 1 minute)
+    from
+        Transaction
+- name: event_single_alias
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05) as 'MyPercentage',
+        funnel(traceId, where duration < 2 as 'step1', where duration < 1 as 'step2'),
+        apdex(duration, 0.02) as 'MyApdex',
+        uniqueCount(appId) as 'MyUniqueCount',
+        count(*) as 'MyCount',
+        min(duration) as 'MyMin',
+        max(duration) as 'MyMax',
+        latest(duration) as 'MyLatest',
+        sum(duration) as 'MySum',
+        average(duration) as 'MyAverage',
+        stddev(duration) as 'MyStdDev',
+        percentile(duration, 50, 75, 90) as 'MyPercentile',
+        rate(uniqueCount(appId), 1 hour) as 'MyRate'
+    from
+        Transaction
+- name: timeseries
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05),
+        funnel(traceId, where duration < 2, where duration < 1),
+        apdex(duration, 0.02),
+        uniqueCount(appId),
+        count(*),
+        min(duration),
+        max(duration),
+        latest(duration),
+        sum(duration),
+        average(duration),
+        stddev(duration),
+        percentile(duration, 50, 75, 90),
+        rate(uniqueCount(appId), 1 minute)
+    from
+        Transaction
+    timeseries
+- name: timeseries_alias
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05) as 'MyPercentage',
+        funnel(traceId, where duration < 2 as 'step1', where duration < 1 as 'step2'),
+        apdex(duration, 0.02) as 'MyApdex',
+        uniqueCount(appId) as 'MyUniqueCount',
+        count(*) as 'MyCount',
+        min(duration) as 'MyMin',
+        max(duration) as 'MyMax',
+        latest(duration) as 'MyLatest',
+        sum(duration) as 'MySum',
+        average(duration) as 'MyAverage',
+        stddev(duration) as 'MyStdDev',
+        percentile(duration, 50, 75, 90) as 'MyPercentile',
+        rate(uniqueCount(appId), 1 hour) as 'MyRate'
+    from
+        Transaction
+    timeseries
+- name: faceted
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05),
+        funnel(traceId, where duration < 2, where duration < 1),
+        apdex(duration, 0.02),
+        uniqueCount(appId),
+        count(*),
+        min(duration),
+        max(duration),
+        latest(duration),
+        sum(duration),
+        average(duration),
+        stddev(duration),
+        percentile(duration, 50, 75, 90),
+        rate(uniqueCount(appId), 1 minute)
+    from
+        Transaction
+    facet
+        appName, appId
+- name: faceted_alias
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05) as 'MyPercentage',
+        funnel(traceId, where duration < 2 as 'step1', where duration < 1 as 'step2'),
+        apdex(duration, 0.02) as 'MyApdex',
+        uniqueCount(appId) as 'MyUniqueCount',
+        count(*) as 'MyCount',
+        min(duration) as 'MyMin',
+        max(duration) as 'MyMax',
+        latest(duration) as 'MyLatest',
+        sum(duration) as 'MySum',
+        average(duration) as 'MyAverage',
+        stddev(duration) as 'MyStdDev',
+        percentile(duration, 50, 75, 90) as 'MyPercentile',
+        rate(uniqueCount(appId), 1 hour) as 'MyRate'
+    from
+        Transaction
+    facet
+        appName, appId
+- name: faceted_timeseries
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05),
+        apdex(duration, 0.02),
+        uniqueCount(appId),
+        count(*),
+        min(duration),
+        max(duration),
+        latest(duration),
+        sum(duration),
+        average(duration),
+        stddev(duration),
+        percentile(duration, 50, 75, 90),
+        rate(uniqueCount(appId), 1 minute)
+    from
+        Transaction
+    facet
+        appName, appId
+    timeseries
+- name: faceted_timeseries_alias
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05) as 'MyPercentage',
+        apdex(duration, 0.02) as 'MyApdex',
+        uniqueCount(appId) as 'MyUniqueCount',
+        count(*) as 'MyCount',
+        min(duration) as 'MyMin',
+        max(duration) as 'MyMax',
+        latest(duration) as 'MyLatest',
+        sum(duration) as 'MySum',
+        average(duration) as 'MyAverage',
+        stddev(duration) as 'MyStdDev',
+        percentile(duration, 50, 75, 90) as 'MyPercentile',
+        rate(uniqueCount(appId), 1 hour) as 'MyRate'
+    from
+        Transaction
+    facet
+        appName, appId
+    timeseries
+- name: compared
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05),
+        funnel(traceId, where duration < 2, where duration < 1),
+        apdex(duration, 0.02),
+        uniqueCount(appId),
+        count(*),
+        min(duration),
+        max(duration),
+        latest(duration),
+        sum(duration),
+        average(duration),
+        stddev(duration),
+        percentile(duration, 50, 75, 90),
+        rate(uniqueCount(appId), 1 minute)
+    from
+        Transaction
+    compare with
+        1 week ago
+- name: compared_alias
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05) as 'MyPercentage',
+        funnel(traceId, where duration < 2 as 'step1', where duration < 1 as 'step2'),
+        apdex(duration, 0.02) as 'MyApdex',
+        uniqueCount(appId) as 'MyUniqueCount',
+        count(*) as 'MyCount',
+        min(duration) as 'MyMin',
+        max(duration) as 'MyMax',
+        latest(duration) as 'MyLatest',
+        sum(duration) as 'MySum',
+        average(duration) as 'MyAverage',
+        stddev(duration) as 'MyStdDev',
+        percentile(duration, 50, 75, 90) as 'MyPercentile',
+        rate(uniqueCount(appId), 1 hour) as 'MyRate'
+    from
+        Transaction
+    compare with
+        1 week ago
+- name: compared_faceted
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05),
+        apdex(duration, 0.02),
+        uniqueCount(appId),
+        count(*),
+        min(duration),
+        max(duration),
+        latest(duration),
+        sum(duration),
+        average(duration),
+        stddev(duration),
+        percentile(duration, 50, 75, 90),
+        rate(uniqueCount(appId), 1 minute)
+    from
+        Transaction
+    compare with
+        1 week ago
+    facet
+        appName, appId
+- name: compared_faceted_alias
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05) as 'MyPercentage',
+        apdex(duration, 0.02) as 'MyApdex',
+        uniqueCount(appId) as 'MyUniqueCount',
+        count(*) as 'MyCount',
+        min(duration) as 'MyMin',
+        max(duration) as 'MyMax',
+        latest(duration) as 'MyLatest',
+        sum(duration) as 'MySum',
+        average(duration) as 'MyAverage',
+        stddev(duration) as 'MyStdDev',
+        percentile(duration, 50, 75, 90) as 'MyPercentile',
+        rate(uniqueCount(appId), 1 hour) as 'MyRate'
+    from
+        Transaction
+    compare with
+        1 week ago
+    facet
+        appName, appId
+- name: compared_timeseries
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05),
+        funnel(traceId, where duration < 2, where duration < 1),
+        apdex(duration, 0.02),
+        uniqueCount(appId),
+        count(*),
+        min(duration),
+        max(duration),
+        latest(duration),
+        sum(duration),
+        average(duration),
+        stddev(duration),
+        percentile(duration, 50, 75, 90),
+        rate(uniqueCount(appId), 1 minute)
+    from
+        Transaction
+    compare with
+        1 week ago
+    timeseries
+- name: compared_timeseries_alias
+  nrql: |
+    select
+        percentage(count(*), where duration < 0.05) as 'MyPercentage',
+        funnel(traceId, where duration < 2 as 'step1', where duration < 1 as 'step2'),
+        apdex(duration, 0.02) as 'MyApdex',
+        uniqueCount(appId) as 'MyUniqueCount',
+        count(*) as 'MyCount',
+        min(duration) as 'MyMin',
+        max(duration) as 'MyMax',
+        latest(duration) as 'MyLatest',
+        sum(duration) as 'MySum',
+        average(duration) as 'MyAverage',
+        stddev(duration) as 'MyStdDev',
+        percentile(duration, 50, 75, 90) as 'MyPercentile',
+        rate(uniqueCount(appId), 1 hour) as 'MyRate'
+    from
+        Transaction
+    compare with
+        1 week ago
+    timeseries
+- name: parameters
+  nrql: |
+    select
+        count(*)
+    from
+        Transaction
+    since
+        {some_since}
+    compare with
+        {some_compare}
+    limit
+        {some_limit}

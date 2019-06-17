@@ -1,0 +1,45 @@
+#
+# define your pivot tables here. names must match a query name
+#
+# AGG functions reference: https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/pivot-tables#PivotValueSummarizeFunction
+#
+AGENTS_APM:
+  rows:
+    master_name:
+    account_name:
+    apmLanguage:
+    apmAgentVersion:
+  columns:
+  values:
+    apmAppName: COUNTUNIQUE
+    usage: SUM
+###
+InsightsUserActivity:
+  rows:
+    master_name:
+      showTotals: False
+    account_name:
+      showTotals: False
+    cases:
+  columns:
+  values:
+    totalTime: SUM
+    queries: SUM
+    dashboards: SUM
+    widgets: SUM
+    inspectedEvents: SUM
+###
+InsightsQueryActivity:
+  rows:
+    master_name:
+      showTotals: False
+    account_name:
+      showTotals: False
+    cases:
+  columns:
+  values:
+    totalTime: SUM
+    users: SUM
+    dashboards: SUM
+    widgets: SUM
+    inspectedEvents: SUM
