@@ -1,10 +1,10 @@
 # Introduction #
 
-This repository tries to simplify the consumption of New Relic events gathered from the Insights Query API. Although the Insights API is very simple to use the challenge resides on getting a consistent result set. The returned payload can have different structures depending on the NRQL issued. This isn't a problem for quick adhoc requests but can become difficult to handle if we don't provide a well-known interface to the results.
+This repository aims to simplify the consumption of New Relic events gathered from the Insights Query API. Although the Insights API is very simple to use the challenge resides on getting a consistent result set. The returned payload can have different structures depending on the NRQL issued. This isn't a problem for quick adhoc requests but can become difficult to handle if we don't provide a well-known interface to the results.
 
 # NRQL Use Cases #
 
-This interface will always return a list of dictionaries from the returned payload. Check the [Insights New Relic Reference](https://docs.newrelic.com/docs/insights/nrql-new-relic-query-language/nrql-reference/nrql-syntax-components-functions) if you need to refresh your NRQL knowledge.
+This interface will always return a list of dictionaries from the parsed payload. Check the [Insights New Relic Reference](https://docs.newrelic.com/docs/insights/nrql-new-relic-query-language/nrql-reference/nrql-syntax-components-functions) if you need to refresh your NRQL knowledge.
 
 All NRQL syntax constructions and valid combinations are supported:
 
@@ -83,17 +83,119 @@ Procedure:
 
 ## AdHoc Query Mode ##
 
+The query command allows a single NRQL statement to be executed:
+
+```
+python insights-cli.py query
+  -k <QUERY_API_KEY>
+  -a <ACCOUNT_ID>
+  -q <NRQL_QUERY>
+```
+
 ## Batch Mode ##
 
+The batch mode offers a very powerful option to automate data extraction from 1 or more New Relic Insights accounts. There are 3 batch modes available:
+
+* batch-local, exports de results to local CSV files
+* batch-google, exports the results to Google Sheets and optionally creates Pivot Tables
+* batch-insights, exports the results back to an Insights custom event
+
+All batch modes require an account list CSV input file and a YAML queries definition file.
+
+*accounts.csv*
+
+
+*queries.yaml*
+ 
 ### Local ###
+
+```
+insights-cli.py batch-local 
+    [-h] 
+    [-v VAULT_FILE] 
+    -q QUERY_FILE 
+    -a ACCOUNT_FILE 
+    -o OUTPUT_FOLDER
+    [-m MASTER_NAMES [MASTER_NAMES ...]]
+
+optional arguments:
+  -v VAULT_FILE, --vault-file VAULT_FILE
+                        Local YAML vault file
+                        [secret:{account_id,query_api_key}]
+  -q QUERY_FILE, --query-file QUERY_FILE
+                        Local YAML queries file [{name,nrql}]
+  -a ACCOUNT_FILE, --account-file ACCOUNT_FILE
+                        Local accounts list CSV file
+                        [master_name,account_id,account_name,query_api_key]
+  -o OUTPUT_FOLDER, --output-folder OUTPUT_FOLDER
+                        Local output folder name
+  -m MASTER_NAMES [MASTER_NAMES ...], --master-names MASTER_NAMES [MASTER_NAMES ...]
+                        Filter master names from account list
+```
 
 ### Google Sheets ###
 
+```
+insights-cli.py batch-google
+    [-h]
+    [-v VAULT_FILE]
+    -q QUERY_FILE
+    -a ACCOUNT_FILE_ID
+    -o OUTPUT_FOLDER_ID
+    -s SECRET_FILE 
+    [-p PIVOT_FILE]
+    [-m MASTER_NAMES [MASTER_NAMES ...]]
+
+optional arguments:
+  -v VAULT_FILE, --vault-file VAULT_FILE
+                        Local YAML vault file
+                        [secret:{account_id,query_api_key}]
+  -q QUERY_FILE, --query-file QUERY_FILE
+                        Local YAML queries file [{name,nrql}]
+  -a ACCOUNT_FILE_ID, --account-file-id ACCOUNT_FILE_ID
+                        Google accounts list Sheets id
+                        [master_name,account_id,account_name,query_api_key]
+  -o OUTPUT_FOLDER_ID, --output-folder-id OUTPUT_FOLDER_ID
+                        Google Drive output Folder id
+  -s SECRET_FILE, --secret-file SECRET_FILE
+                        Google API secret file
+  -p PIVOT_FILE, --pivot-file PIVOT_FILE
+                        Local YAML pivot tables file
+  -m MASTER_NAMES [MASTER_NAMES ...], --master-names MASTER_NAMES [MASTER_NAMES ...]
+                        Filter master names from account list
+```
+
 ### Insights ###
+
+```
+insights-cli.py batch-insights
+    [-h]
+    [-v VAULT_FILE]
+    -q QUERY_FILE
+    -a ACCOUNT_FILE
+    -i INSERT_ACCOUNT_ID
+    -k INSERT_API_KEY
+    [-m MASTER_NAMES [MASTER_NAMES ...]]
+
+optional arguments:
+  -v VAULT_FILE, --vault-file VAULT_FILE
+                        Local YAML vault file
+                        [secret:{account_id,query_api_key}]
+  -q QUERY_FILE, --query-file QUERY_FILE
+                        Local YAML queries file [{name,nrql}]
+  -a ACCOUNT_FILE, --account-file ACCOUNT_FILE
+                        Local accounts list CSV file
+                        [master_name,account_id,account_name,query_api_key]
+  -i INSERT_ACCOUNT_ID, --insert-account-id INSERT_ACCOUNT_ID
+                        New Relic Insights insert account id
+  -k INSERT_API_KEY, --insert-api-key INSERT_API_KEY
+                        New Relic Insights insert API key
+  -m MASTER_NAMES [MASTER_NAMES ...], --master-names MASTER_NAMES [MASTER_NAMES ...]
+                        Filter master names from account list
+```
 
 ## Batch Mode Configuration Files ##
 
 ### Queries ###
 
 ### Vault ###
-
